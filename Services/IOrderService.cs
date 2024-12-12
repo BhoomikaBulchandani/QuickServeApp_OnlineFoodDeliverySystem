@@ -15,6 +15,7 @@ namespace QuickServeAPP.Services
         Task<OrderDto> UpdateOrderStatusAsync(int orderId, string status);
         Task<IEnumerable<OrderDto>> GetAllOrdersAsync(); // Fetch all orders
         Task<OrderDto> InitializeOrderFromCartAsync(int userId, string address);
+        Task<IEnumerable<OrderDto>> GetOrdersByStatusAsync(string status);
     }
 }
 

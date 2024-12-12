@@ -12,7 +12,8 @@ namespace QuickServeAPP.Repository
         Task<IEnumerable<Order>> GetOrdersByUserIdAsync(int userId);
         Task<IEnumerable<Order>> GetOrdersByRestaurantIdAsync(int restaurantId);
         Task<Order> UpdateOrderAsync(Order order);
-        Task<IEnumerable<Order>> GetAllOrdersAsync(); // Fetch all orders
+        Task<IEnumerable<Order>> GetAllOrdersAsync();
+        Task<IEnumerable<Order>> GetOrdersByStatusAsync(string status);
     }
 }
 

@@ -72,7 +72,21 @@ namespace QuickServeAPP.Repository
         {
             return await _context.Orders.ToListAsync();
         }
-        
+
+        public async Task<IEnumerable<Order>> GetOrdersByStatusAsync(string status)
+        {
+            if (!Enum.TryParse<OrderStatus>(status, true, out var parsedStatus))
+            {
+                throw new ArgumentException("Invalid order status.");
+            }
+
+            return await _context.Orders
+                .Where(o => o.OrderStatus == parsedStatus)
+                .Include(o => o.OrderItems)
+                .ToListAsync();
+        }
+
+
 
     }
 }

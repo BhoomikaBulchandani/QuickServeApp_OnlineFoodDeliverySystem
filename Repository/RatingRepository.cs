@@ -64,6 +64,33 @@ namespace QuickServeAPP.Repository
         {
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<Rating>> GetRatingsByUserIdWithoutMenuAsync(int userId)
+        {
+            return await _context.Ratings
+                .Where(r => r.UserID == userId && r.MenuID == null)
+                .Select(r => new Rating
+                {
+                    RatingID = r.RatingID,
+                    UserID = r.UserID,
+                    RestaurantID = r.RestaurantID,
+                    OrderID = r.OrderID,
+                    RatingScore = r.RatingScore,
+                    ReviewText = r.ReviewText,
+                    RatingDate = r.RatingDate
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<Rating>> GetAllRatingsAsync()
+        {
+            return await _context.Ratings
+                .Where(r => r.MenuID == null)
+                .Include(r => r.User)
+                .Include(r => r.Restaurant)
+                .ToListAsync();
+        }
+
     }
 }
 

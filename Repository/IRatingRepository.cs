@@ -14,6 +14,8 @@ namespace QuickServeAPP.Repository
         Task<decimal> GetAverageRatingByRestaurantIdAsync(int restaurantId);
         Task SaveChangesAsync();
         Task<double> GetAverageRatingAsync();
+        Task<IEnumerable<Rating>> GetRatingsByUserIdWithoutMenuAsync(int userId);
+        Task<IEnumerable<Rating>> GetAllRatingsAsync();
     }
 }
 

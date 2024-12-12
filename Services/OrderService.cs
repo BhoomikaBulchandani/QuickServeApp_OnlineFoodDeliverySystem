@@ -219,6 +219,31 @@ namespace QuickServeAPP.Services
         }
 
 
+        public async Task<IEnumerable<OrderDto>> GetOrdersByStatusAsync(string status)
+        {
+            var orders = await _orderRepository.GetOrdersByStatusAsync(status);
+
+            // Map the entity to DTO
+            return orders.Select(order => new OrderDto
+            {
+                OrderID = order.OrderID,
+                UserID = order.UserID,
+                RestaurantID = order.RestaurantID,
+                Address = order.Address,
+                OrderDate = order.OrderDate,
+                TotalAmount = order.TotalAmount,
+                OrderStatus = order.OrderStatus.ToString(),
+                OrderItems = order.OrderItems.Select(item => new OrderItemDto
+                {
+                    MenuID = item.MenuID,
+                    Quantity = item.Quantity,
+                    Price = item.Price
+                }).ToList()
+            });
+        }
+
+
+
         public async Task<OrderDto> InitializeOrderFromCartAsync(int userId, string address)
         {
             // Validate the address

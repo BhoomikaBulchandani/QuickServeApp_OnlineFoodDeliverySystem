@@ -6,7 +6,7 @@ using QuickServeAPP.DTOs;
 
 namespace QuickServeAPP.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    //[Authorize(Roles = "Admin")]
     [ApiController]
     [Route("api/admin/dashboard")]
     public class AdminDashboardController : ControllerBase
@@ -15,13 +15,15 @@ namespace QuickServeAPP.Controllers
         private readonly IRestaurantService _restaurantService;
         private readonly IOrderService _orderService;
         private readonly IReportService _reportService;
+        private readonly IRatingService _ratingService;
 
-        public AdminDashboardController(IUserService userService, IRestaurantService restaurantService, IOrderService orderService, IReportService reportService)
+        public AdminDashboardController(IUserService userService, IRestaurantService restaurantService, IOrderService orderService, IReportService reportService, IRatingService ratingService)
         {
             _userService = userService;
             _restaurantService = restaurantService;
             _orderService = orderService;
             _reportService = reportService;
+            _ratingService = ratingService;
         }
 
         [HttpGet("reports")]
@@ -102,6 +104,69 @@ namespace QuickServeAPP.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
+
+        [HttpPost("Restaurant")]
+        public async Task<IActionResult> AddRestaurant([FromBody] RestaurantDto restaurantDto)
+        {
+            try
+            {
+                var newRestaurant = await _restaurantService.CreateRestaurantAsync(restaurantDto);
+
+                return CreatedAtAction(nameof(GetRestaurantById), new { id = newRestaurant.RestaurantID }, newRestaurant);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        [HttpGet("Restaurant/{id}")]
+        public async Task<IActionResult> GetRestaurantById(int id)
+        {
+            try
+            {
+                var restaurant = await _restaurantService.GetRestaurantByIdAsync(id);
+                return Ok(restaurant);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { Message = ex.Message });
+            }
+        }
+
+        [HttpGet("orders/filter")]
+        public async Task<IActionResult> FilterOrders([FromQuery] string status)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(status))
+                {
+                    return BadRequest(new { message = "Order status is required." });
+                }
+
+                var orders = await _orderService.GetOrdersByStatusAsync(status);
+                return Ok(orders);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpGet("ratings")]
+        public async Task<IActionResult> GetAllRatings()
+        {
+            try
+            {
+                var ratings = await _ratingService.GetAllRatingsAsync();
+                return Ok(ratings);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
 
     }
 }

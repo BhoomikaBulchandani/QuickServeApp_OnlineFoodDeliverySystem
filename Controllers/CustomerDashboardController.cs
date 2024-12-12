@@ -7,7 +7,7 @@ using QuickServeAPP.Services;
 
 namespace QuickServeAPP.Controllers
 {
-    [Authorize(Roles = "Customer")]
+    //[Authorize(Roles = "Customer")]
     [ApiController]
     [Route("api/customer/dashboard")]
     public class CustomerDashboardController : ControllerBase

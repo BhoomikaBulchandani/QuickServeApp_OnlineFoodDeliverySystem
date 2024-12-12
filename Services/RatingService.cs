@@ -107,6 +107,29 @@ namespace QuickServeAPP.Services
         {
             return await _ratingRepository.GetAverageRatingByMenuIdAsync(menuId);
         }
+
+        public async Task<IEnumerable<Rating>> GetRatingsByUserIdWithoutMenuAsync(int userId)
+        {
+            return await _ratingRepository.GetRatingsByUserIdWithoutMenuAsync(userId);
+        }
+
+        public async Task<IEnumerable<RatingDto>> GetAllRatingsAsync()
+        {
+            var ratings = await _ratingRepository.GetAllRatingsAsync();
+
+            // Map entity to DTO
+            return ratings.Select(rating => new RatingDto
+            {
+                RatingID = rating.RatingID,
+                UserID = rating.UserID,
+                RestaurantID = rating.RestaurantID,
+                OrderID = rating.OrderID,
+                RatingScore = rating.RatingScore,
+                ReviewText = rating.ReviewText,
+                RatingDate = rating.RatingDate
+            });
+        }
+
     }
 }
 

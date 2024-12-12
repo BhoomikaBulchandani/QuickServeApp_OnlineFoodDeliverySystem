@@ -13,6 +13,8 @@ namespace QuickServeAPP.Services
         Task<decimal> GetAverageRatingByRestaurantIdAsync(int restaurantId);
         Task<IEnumerable<RatingDto>> GetRatingsByMenuIdAsync(int menuId);
         Task<decimal> GetAverageRatingByMenuIdAsync(int menuId);
+        Task<IEnumerable<Rating>> GetRatingsByUserIdWithoutMenuAsync(int userId);
+        Task<IEnumerable<RatingDto>> GetAllRatingsAsync();
     }
 }
 

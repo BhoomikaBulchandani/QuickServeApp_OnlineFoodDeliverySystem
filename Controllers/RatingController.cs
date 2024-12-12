@@ -85,6 +85,17 @@ namespace QuickServeAPP.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
+
+        [HttpGet("user/{userId}/no-menu")]
+        public async Task<IActionResult> GetRatingsByUserIdWithoutMenu(int userId)
+        {
+            var ratings = await _ratingService.GetRatingsByUserIdWithoutMenuAsync(userId);
+            if (ratings == null || !ratings.Any())
+            {
+                return NotFound(new { message = "No ratings found for the user." });
+            }
+            return Ok(ratings);
+        }
     }
 
 }
