@@ -22,7 +22,7 @@ namespace QuickServeAPP.Repository
         {
             // Use LINQ to query the database
             return await _context.Menus
-                .Where(m => m.RestaurantID == restaurantId) // Filter by restaurant ID
+                .Where(m => m.RestaurantID == restaurantId && !m.IsDeleted) // Filter by restaurant ID
                 .ToListAsync(); // Execute query and convert to a list
         }
 
@@ -30,7 +30,7 @@ namespace QuickServeAPP.Repository
         public async Task<IEnumerable<MenuWithRatingDto>> GetMenusWithRatingsByRestaurantIdAsync(int restaurantId)
         {
             var menus = await _context.Menus
-                .Where(m => m.RestaurantID == restaurantId)
+                .Where(m => m.RestaurantID == restaurantId && !m.IsDeleted)
                 .Select(m => new MenuWithRatingDto
                 {
                     MenuID = m.MenuID,
@@ -77,10 +77,11 @@ namespace QuickServeAPP.Repository
             var menu = await GetMenuByIdAsync(menuId);
             if (menu == null)
             { return false; }
-                _context.Menus.Remove(menu);
-                await _context.SaveChangesAsync();
+            menu.IsDeleted = true; // Soft delete by marking it as deleted
+            _context.Menus.Update(menu); // Mark the menu as modified
+            await _context.SaveChangesAsync(); // Save changes
             return true;
-            
+
         }
 
         public async Task<List<Menu>> GetMenusByIdsAsync(List<int> menuIds)

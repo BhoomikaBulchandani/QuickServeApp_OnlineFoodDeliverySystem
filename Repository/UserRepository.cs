@@ -24,6 +24,11 @@ namespace QuickServeAPP.Repository
             return await _context.Users.ToListAsync();
         }
 
+        public async Task<IEnumerable<User>> GetAllActiveUsersAsync()
+        {
+            return await _context.Users.Where(u => u.IsActive).ToListAsync();
+        }
+
         public async Task<User> GetUserByIdAsync(int userId)
         {
             return await _context.Users.FindAsync(userId);
@@ -48,18 +53,19 @@ namespace QuickServeAPP.Repository
             return user;
         }
 
-        public async Task<bool> DeleteUserAsync(int userId)
+        public async Task<bool> UpdateUserStatusAsync(User user)
         {
-            var user = await GetUserByIdAsync(userId);
-            if (user == null)
-            {
+            var existingUser = await GetUserByIdAsync(user.UserID);
+            if (existingUser == null)
                 return false;
-            }
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+
+            existingUser.IsActive = user.IsActive; // Update the isActive field
+            _context.Users.Update(existingUser); // Mark the user as modified
+            await _context.SaveChangesAsync(); // Save the changes to the database
             return true;
-            
-            
         }
+
+
+
     }
 }

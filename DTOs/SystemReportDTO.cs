@@ -4,6 +4,7 @@
     {
         public int TotalUsers { get; set; }
         public int ActiveUsers { get; set; }
+        public int SuspendedUsers { get; set; }
         public int TotalRestaurants { get; set; }
         public int ActiveRestaurants { get; set; }
         public int SuspendedRestaurants { get; set; }

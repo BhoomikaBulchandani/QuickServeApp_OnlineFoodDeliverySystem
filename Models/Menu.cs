@@ -44,6 +44,7 @@ namespace QuickServeAPP.Models
 
         [Required(ErrorMessage = "Status is required.")]
         public string Status { get; set; } = "Available";
+        public bool IsDeleted { get; set; }
 
         // Navigation properties
         public virtual Restaurant Restaurant { get; set; }  // Many-to-one relationship with Restaurant

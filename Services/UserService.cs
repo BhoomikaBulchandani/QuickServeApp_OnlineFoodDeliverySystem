@@ -124,7 +124,7 @@ namespace QuickServeAPP.Services
         // Fetch all users
         public async Task<IEnumerable<UserDto>> GetAllUsersAsync()
         {
-            var users = await _userRepository.GetAllUsersAsync();
+            var users = await _userRepository.GetAllActiveUsersAsync();
             return users.Select(user => new UserDto
             {
                 UserID = user.UserID,
@@ -142,7 +142,8 @@ namespace QuickServeAPP.Services
             if (user == null)
                 return false;
 
-            return await _userRepository.DeleteUserAsync(userId);
+            user.IsActive = false; // Set isActive to false to "soft delete" the user
+            return await _userRepository.UpdateUserStatusAsync(user);
         }
     }
 }

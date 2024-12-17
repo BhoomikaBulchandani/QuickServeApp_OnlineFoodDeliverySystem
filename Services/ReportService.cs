@@ -23,6 +23,7 @@ namespace QuickServeAPP.Services
         {
             var totalUsers = (await _userRepository.GetAllUsersAsync()).Count();
             var activeUsers = (await _userRepository.GetAllUsersAsync()).Count(u => u.IsActive);
+            var InactiveUsers = (await _userRepository.GetAllUsersAsync()).Count(u => !u.IsActive);
 
             var totalRestaurants = (await _restaurantRepository.GetAllRestaurantsAsync()).Count();
             var activeRestaurants = (await _restaurantRepository.GetAllRestaurantsAsync()).Count(r => r.IsActive);
@@ -42,6 +43,7 @@ namespace QuickServeAPP.Services
             {
                 TotalUsers = totalUsers,
                 ActiveUsers = activeUsers,
+                SuspendedUsers = InactiveUsers,
                 TotalRestaurants = totalRestaurants,
                 ActiveRestaurants = activeRestaurants,
                 SuspendedRestaurants = suspendedRestaurants,
