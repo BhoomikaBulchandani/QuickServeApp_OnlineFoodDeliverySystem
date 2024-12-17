@@ -86,6 +86,50 @@ namespace QuickServeAPP.Controllers
                 return BadRequest(new { Message = ex.Message });
             }
         }
+
+        [HttpGet("{id}/exists")]
+        public async Task<IActionResult> CheckRestaurantExists(int id)
+        {
+            var exists = _restaurantService.DoesRestaurantExist(id);
+            if (exists)
+                return Ok(new { exists = true });
+            else
+                return NotFound(new { exists = false });
+        }
+
+
+        [HttpGet("search-by-item")]
+        public IActionResult SearchRestaurantsByItem(string itemName)
+        {
+            if (string.IsNullOrEmpty(itemName))
+                return BadRequest("Item name is required");
+
+            var restaurants = _restaurantService.GetRestaurantsByItem(itemName);
+            return Ok(restaurants);
+        }
+
+        [HttpGet("getTrendingRestaurants")]
+        public IActionResult GetTrendingRestaurants()
+        {
+            try
+            {
+                var trendingRestaurants = _restaurantService.GetTrendingRestaurants();
+
+                // Check if restaurants are available
+                if (!trendingRestaurants.Any())
+                {
+                    return NotFound("No trending restaurants available.");
+                }
+
+                return Ok(trendingRestaurants);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "An error occurred while fetching trending restaurants.");
+            }
+        }
+
+
     }
 }
 

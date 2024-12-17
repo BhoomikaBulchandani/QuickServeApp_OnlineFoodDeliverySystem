@@ -147,6 +147,23 @@ namespace QuickServeAPP.Services
             await _restaurantRepository.UpdateRestaurantAsync(restaurant);
             return true;
         }
+
+        public bool DoesRestaurantExist(int id)
+        {
+            return _restaurantRepository.GetById(id) != null;
+        }
+
+        public List<Restaurant> GetRestaurantsByItem(string itemName)
+        {
+            return _restaurantRepository.GetRestaurantsByItem(itemName);
+        }
+
+        public IEnumerable<Restaurant> GetTrendingRestaurants()
+        {
+            return _restaurantRepository.GetTrendingRestaurants();
+        }
+
+
     }
 }
 

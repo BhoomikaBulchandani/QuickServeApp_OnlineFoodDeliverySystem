@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace QuickServeAPP.Models
 {
@@ -27,6 +28,13 @@ namespace QuickServeAPP.Models
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;  // Use UTC for consistency in timestamps.
         public DateTime? UpdatedAt { get; set; }  // Can be set automatically in application logic.
+
+        [NotMapped]
+        public double Rating { get; set; } // Dynamic rating
+
+        [NotMapped]
+        public string Label { get; set; } // Dynamic label
+
 
         // Navigation properties
         public virtual ICollection<Menu> Menus { get; set; } = new List<Menu>();  // One-to-many relationship with Menu.

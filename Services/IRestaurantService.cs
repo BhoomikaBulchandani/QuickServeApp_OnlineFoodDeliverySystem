@@ -13,6 +13,9 @@ namespace QuickServeAPP.Services
         Task<RestaurantDto> UpdateRestaurantAsync(int restaurantId, RestaurantDto restaurantDto);
         Task<bool> DeleteRestaurantAsync(int restaurantId);
         Task<bool> UpdateRestaurantStatusAsync(int restaurantId, bool isActive); // Approve/suspend a restaurant
+        bool DoesRestaurantExist(int id);
+        List<Restaurant> GetRestaurantsByItem(string itemName);
+        IEnumerable<Restaurant> GetTrendingRestaurants();
     }
 }
 

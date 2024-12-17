@@ -11,6 +11,10 @@ namespace QuickServeAPP.Repository
         Task<Restaurant> CreateRestaurantAsync(Restaurant restaurant);
         Task<Restaurant> UpdateRestaurantAsync(Restaurant restaurant);
         Task<bool> DeleteRestaurantAsync(int restaurantId);
+
+        Restaurant GetById(int id);
+        List<Restaurant> GetRestaurantsByItem(string itemName);
+        IEnumerable<Restaurant> GetTrendingRestaurants();
     }
 }
 

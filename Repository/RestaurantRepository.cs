@@ -52,6 +52,41 @@ namespace QuickServeAPP.Repository
             return true;
             
         }
+
+        public Restaurant GetById(int id)
+        {
+            return _context.Restaurants.FirstOrDefault(r => r.RestaurantID == id);
+        }
+
+        public List<Restaurant> GetRestaurantsByItem(string itemName)
+        {
+            return _context.Restaurants
+                .Where(r => r.Menus.Any(mi => mi.ItemName.Contains(itemName)))
+                .ToList();
+        }
+
+        public IEnumerable<Restaurant> GetTrendingRestaurants()
+        {
+            // Fetch the first three restaurants (or random ones if needed)
+            //return _context.Restaurants
+            //               .OrderBy(r => r.RestaurantID) // Order by ID (or another property)
+            //               .Take(3) // Fetch the first 3 records
+            //               .ToList();
+
+            // For random restaurants, you can shuffle the results:
+            var restaurants = _context.Restaurants.OrderBy(r => Guid.NewGuid()).Take(3).ToList();
+            var random = new Random();
+            foreach (var restaurant in restaurants)
+            {
+                restaurant.Rating = Math.Round(4 + random.NextDouble(), 1); 
+                restaurant.Label = random.Next(0, 2) == 0 ? "Popular" : "Recommended"; 
+            }
+
+            return restaurants;
+        }
+
+
+
     }
 }
 
