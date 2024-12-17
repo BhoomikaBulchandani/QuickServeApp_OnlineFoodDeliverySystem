@@ -17,14 +17,18 @@ namespace QuickServeAPP.Controllers
         private readonly IRestaurantService _restaurantService;
         private readonly IMenuService _menuService;
         private readonly IPaymentService _paymentService;
+        private readonly EmailService _emailService;
+        private readonly IUserService _userService;
 
-        public CustomerDashboardController(IOrderService orderService, ICartService cartService, IRestaurantService restaurantService, IMenuService menuService, IPaymentService paymentService)
+        public CustomerDashboardController(IOrderService orderService, ICartService cartService, IRestaurantService restaurantService, IMenuService menuService, IPaymentService paymentService, IUserService userService, EmailService emailService)
         {
             _orderService = orderService;
             _cartService = cartService;
             _restaurantService = restaurantService;
             _menuService = menuService;
             _paymentService = paymentService;
+            _userService = userService;
+            _emailService = emailService;
         }
 
         // Get all restaurants
@@ -58,6 +62,14 @@ namespace QuickServeAPP.Controllers
             try
             {
                 var order = await _orderService.InitializeOrderFromCartAsync(userId, orderDto.Address);
+                if (order != null)
+                {
+                    var emailBody = $"<h1>Order Confirmation</h1><p>Your order #{order.OrderID} has been placed successfully!</p><p>Total: {order.TotalAmount:C}</p>.<p>Thank you for using QuickServe.</p>";
+                    var user = await _userService.GetUserByIdAsync(order.UserID);
+                    var userEmail = user?.Email;
+                    await _emailService.SendEmailAsync(userEmail, "Order Confirmation", emailBody);
+                    return Ok(order);
+                }
                 return Ok(order);
             }
             catch (Exception ex)

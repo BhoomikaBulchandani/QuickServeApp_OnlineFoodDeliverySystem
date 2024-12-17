@@ -102,6 +102,9 @@ builder.Services.AddScoped<ICartItemRepository, CartItemRepository>();
 builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
 builder.Services.AddScoped<IRatingRepository, RatingRepository>();
 
+builder.Services.AddTransient<EmailService>();
+
+
 
 
 
